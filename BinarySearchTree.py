@@ -14,16 +14,16 @@ class PlayerBST:
         self.root = None
 
     def insert(self, player):
-        self.root = self._insert(self.root, player)
+        self.root = self.insert_evaluate(self.root, player)
 
-    def _insert(self, node, player):
+    def insert_evaluate(self, node, player):
         if node is None:
             return TreeNode(player)
 
         if player.name < node.player.name:
-            node.left = self._insert(node.left, player)
+            node.left = self.insert_evaluate(node.left, player)
         elif player.name > node.player.name:
-            node.right = self._insert(node.right, player)
+            node.right = self.insert_evaluate(node.right, player)
         else:
             # If a node with the same key exists, update its value
             node.player = player
