@@ -13,52 +13,35 @@ class PlayerBST:
     def __init__(self):
         self.root = None
 
-    def insert(self, player, current=None):
-        if not self.root:
-            self.root = TreeNode(player)
-            return
+    def insert(self, player):
+        self.root = self._insert(self.root, player)
 
-        if current is None:
-            current = self.root
+    def _insert(self, node, player):
+        if node is None:
+            return TreeNode(player)
 
-        if player.name < current.player.name:
-            if current.left is None:
-                current.left = TreeNode(player)
-            else:
-                self.insert(player, current.left)
-        elif player.name > current.player.name:
-            if current.right is None:
-                current.right = TreeNode(player)
-            else:
-                self.insert(player, current.right)
+        if player.name < node.player.name:
+            node.left = self._insert(node.left, player)
+        elif player.name > node.player.name:
+            node.right = self._insert(node.right, player)
         else:
             # If a node with the same key exists, update its value
-            current.player = player
+            node.player = player
 
-    def insert_player(self, name, score):
-        player = Player(name, score)
-        self.insert(player)
-
-    def _search(self, name, current):
-        if current is None:
-            return None
-        if name == current.player.name:
-            return current.player
-        elif name < current.player.name:
-            return self._search(name, current.left)
-        else:
-            return self._search(name, current.right)
+        return node
 
     def search(self, name):
-        return self._search(name, self.root)
+        return self._search(self.root, name)
 
-    def inorder_traversal(self, node=None):
+    def _search(self, node, name):
         if node is None:
-            node = self.root
-        if node:
-            self.inorder_traversal(node.left)
-            print(f"Name: {node.player.name}, Score: {node.player.score}")
-            self.inorder_traversal(node.right)
+            return None
+        if name == node.player.name:
+            return node.player
+        elif name < node.player.name:
+            return self._search(node.left, name)
+        else:
+            return self._search(node.right, name)
 
     def print_tree(self):
         if not self.root:
@@ -81,21 +64,10 @@ class PlayerBST:
 
 # Usage example:
 bst = PlayerBST()
-bst.insert_player("Alice", 85)
-bst.insert_player("Bob", 92)
-bst.insert_player("Charlie", 78)
-bst.insert_player("David", 95)
-
-#print("Inorder traversal of the BST:")
-#bst.inorder_traversal()
-
-# Search for a player
-# search_name = "Bob"
-# found_player = bst.search(search_name)
-# if found_player:
-#    print(f"Found {search_name}: Score - {found_player.score}")
-# else:
-#    print(f"{search_name} not found in the BST.")
+bst.insert(Player("Alice", 85))
+bst.insert(Player("Bob", 92))
+bst.insert(Player("Charlie", 78))
+bst.insert(Player("David", 95))
 
 print("Binary Search Tree:")
 bst.print_tree()
